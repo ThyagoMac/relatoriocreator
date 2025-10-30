@@ -25,6 +25,12 @@ export type DeveloperLevel = 'Trainee' | 'Júnior' | 'Pleno' | 'Sênior' | 'Espe
 
 export type ComplexityLevel = 'Baixa' | 'Média' | 'Intermediária' | 'Alta' | 'Especialista';
 
+export interface Evidence {
+  id: string;
+  imagens: string[];
+  descricao: string;
+}
+
 export interface Demand {
   id: string;
   titulo: string;
@@ -40,8 +46,10 @@ export interface Demand {
   nomeFuncionalidadeTela: string;
   perfilDesenvolvedor: DeveloperLevel;
   complexidadeDemanda: ComplexityLevel;
-  evidenciaImagem: string | null;
-  evidenciaTexto: string;
+  evidencias: Evidence[];
+  // Campos antigos para compatibilidade (deprecated)
+  evidenciaImagem?: string | null;
+  evidenciaTexto?: string;
 }
 
 export interface GeneralData {

@@ -1,13 +1,21 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { generalDataSchema, type GeneralDataFormData } from '../schemas/generalDataSchema';
-import { Button } from './ui/Button';
-import { Input } from './ui/Input';
-import { Textarea } from './ui/Textarea';
-import { Label } from './ui/Label';
-import { loadGeneralData, saveGeneralData, getDefaultGeneralData, imageToBase64 } from '../utils/storage';
-import type { GeneralData } from '../types/report';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  generalDataSchema,
+  type GeneralDataFormData,
+} from "../schemas/generalDataSchema";
+import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
+import { Textarea } from "./ui/Textarea";
+import { Label } from "./ui/Label";
+import {
+  loadGeneralData,
+  saveGeneralData,
+  getDefaultGeneralData,
+  imageToBase64,
+} from "../utils/storage";
+import type { GeneralData } from "../types/report";
 
 interface GeneralDataFormProps {
   onSave: (data: GeneralData) => void;
@@ -28,8 +36,8 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
     })(),
   });
 
-  const logoEmpresa = watch('logoEmpresa');
-  const imagemCapa = watch('imagemCapa');
+  const logoEmpresa = watch("logoEmpresa");
+  const imagemCapa = watch("imagemCapa");
 
   useEffect(() => {
     const stored = loadGeneralData();
@@ -42,14 +50,14 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
 
   const handleImageUpload = async (
     file: File | null,
-    field: 'logoEmpresa' | 'imagemCapa'
+    field: "logoEmpresa" | "imagemCapa"
   ) => {
     if (file) {
       try {
         const base64 = await imageToBase64(file);
         setValue(field, base64);
       } catch (error) {
-        console.error('Erro ao fazer upload da imagem:', error);
+        console.error("Erro ao fazer upload da imagem:", error);
       }
     } else {
       setValue(field, null);
@@ -76,7 +84,9 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
               id="logoEmpresa"
               type="file"
               accept="image/*"
-              onChange={(e) => handleImageUpload(e.target.files?.[0] || null, 'logoEmpresa')}
+              onChange={(e) =>
+                handleImageUpload(e.target.files?.[0] || null, "logoEmpresa")
+              }
               className="cursor-pointer"
             />
             {logoEmpresa && (
@@ -95,23 +105,29 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="nomeUsuario">Nome do Usuário *</Label>
           <Input
             id="nomeUsuario"
-            {...register('nomeUsuario')}
-            className={errors.nomeUsuario ? 'border-red-500' : ''}
+            {...register("nomeUsuario")}
+            className={errors.nomeUsuario ? "border-red-500" : ""}
           />
           {errors.nomeUsuario && (
-            <p className="mt-1 text-sm text-red-500">{errors.nomeUsuario.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.nomeUsuario.message}
+            </p>
           )}
         </div>
 
         <div>
-          <Label htmlFor="prepostoGerente">Preposto/Gerente de Projetos *</Label>
+          <Label htmlFor="prepostoGerente">
+            Preposto/Gerente de Projetos *
+          </Label>
           <Input
             id="prepostoGerente"
-            {...register('prepostoGerente')}
-            className={errors.prepostoGerente ? 'border-red-500' : ''}
+            {...register("prepostoGerente")}
+            className={errors.prepostoGerente ? "border-red-500" : ""}
           />
           {errors.prepostoGerente && (
-            <p className="mt-1 text-sm text-red-500">{errors.prepostoGerente.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.prepostoGerente.message}
+            </p>
           )}
         </div>
 
@@ -119,11 +135,13 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="responsavelTecnico">Responsável Técnico *</Label>
           <Input
             id="responsavelTecnico"
-            {...register('responsavelTecnico')}
-            className={errors.responsavelTecnico ? 'border-red-500' : ''}
+            {...register("responsavelTecnico")}
+            className={errors.responsavelTecnico ? "border-red-500" : ""}
           />
           {errors.responsavelTecnico && (
-            <p className="mt-1 text-sm text-red-500">{errors.responsavelTecnico.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.responsavelTecnico.message}
+            </p>
           )}
         </div>
 
@@ -131,11 +149,13 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="fiscalContrato">Fiscal do Contrato *</Label>
           <Input
             id="fiscalContrato"
-            {...register('fiscalContrato')}
-            className={errors.fiscalContrato ? 'border-red-500' : ''}
+            {...register("fiscalContrato")}
+            className={errors.fiscalContrato ? "border-red-500" : ""}
           />
           {errors.fiscalContrato && (
-            <p className="mt-1 text-sm text-red-500">{errors.fiscalContrato.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.fiscalContrato.message}
+            </p>
           )}
         </div>
 
@@ -143,8 +163,8 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="titulo">Título *</Label>
           <Input
             id="titulo"
-            {...register('titulo')}
-            className={errors.titulo ? 'border-red-500' : ''}
+            {...register("titulo")}
+            className={errors.titulo ? "border-red-500" : ""}
           />
           {errors.titulo && (
             <p className="mt-1 text-sm text-red-500">{errors.titulo.message}</p>
@@ -158,7 +178,9 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
               id="imagemCapa"
               type="file"
               accept="image/*"
-              onChange={(e) => handleImageUpload(e.target.files?.[0] || null, 'imagemCapa')}
+              onChange={(e) =>
+                handleImageUpload(e.target.files?.[0] || null, "imagemCapa")
+              }
               className="cursor-pointer"
             />
             {imagemCapa && (
@@ -177,11 +199,13 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="subtitulo">Sub-título *</Label>
           <Input
             id="subtitulo"
-            {...register('subtitulo')}
-            className={errors.subtitulo ? 'border-red-500' : ''}
+            {...register("subtitulo")}
+            className={errors.subtitulo ? "border-red-500" : ""}
           />
           {errors.subtitulo && (
-            <p className="mt-1 text-sm text-red-500">{errors.subtitulo.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.subtitulo.message}
+            </p>
           )}
         </div>
 
@@ -189,12 +213,14 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="objetivoArtefato">Objetivo deste artefato *</Label>
           <Textarea
             id="objetivoArtefato"
-            {...register('objetivoArtefato')}
+            {...register("objetivoArtefato")}
             rows={4}
-            className={errors.objetivoArtefato ? 'border-red-500' : ''}
+            className={errors.objetivoArtefato ? "border-red-500" : ""}
           />
           {errors.objetivoArtefato && (
-            <p className="mt-1 text-sm text-red-500">{errors.objetivoArtefato.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.objetivoArtefato.message}
+            </p>
           )}
         </div>
 
@@ -202,11 +228,13 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="numeroContrato">Nº do Contrato *</Label>
           <Input
             id="numeroContrato"
-            {...register('numeroContrato')}
-            className={errors.numeroContrato ? 'border-red-500' : ''}
+            {...register("numeroContrato")}
+            className={errors.numeroContrato ? "border-red-500" : ""}
           />
           {errors.numeroContrato && (
-            <p className="mt-1 text-sm text-red-500">{errors.numeroContrato.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.numeroContrato.message}
+            </p>
           )}
         </div>
 
@@ -214,11 +242,13 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="numeroOS">Nº da OS *</Label>
           <Input
             id="numeroOS"
-            {...register('numeroOS')}
-            className={errors.numeroOS ? 'border-red-500' : ''}
+            {...register("numeroOS")}
+            className={errors.numeroOS ? "border-red-500" : ""}
           />
           {errors.numeroOS && (
-            <p className="mt-1 text-sm text-red-500">{errors.numeroOS.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.numeroOS.message}
+            </p>
           )}
         </div>
 
@@ -226,26 +256,32 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="detalhamentoOS">Detalhamento da OS *</Label>
           <Textarea
             id="detalhamentoOS"
-            {...register('detalhamentoOS')}
+            {...register("detalhamentoOS")}
             rows={4}
-            className={errors.detalhamentoOS ? 'border-red-500' : ''}
-            placeholder="Demandas de novo projeto, sustentação e correções (garantia), realizadas durante a sprint."
+            className={errors.detalhamentoOS ? "border-red-500" : ""}
+            placeholder="Descreva o detalhamento da Ordem de Serviço"
           />
           {errors.detalhamentoOS && (
-            <p className="mt-1 text-sm text-red-500">{errors.detalhamentoOS.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.detalhamentoOS.message}
+            </p>
           )}
         </div>
 
         <div>
-          <Label htmlFor="objetivoERS">O(s) objetivo(s) desta ERS é (são) *</Label>
+          <Label htmlFor="objetivoERS">
+            O(s) objetivo(s) desta ERS é (são) *
+          </Label>
           <Textarea
             id="objetivoERS"
-            {...register('objetivoERS')}
+            {...register("objetivoERS")}
             rows={3}
-            className={errors.objetivoERS ? 'border-red-500' : ''}
+            className={errors.objetivoERS ? "border-red-500" : ""}
           />
           {errors.objetivoERS && (
-            <p className="mt-1 text-sm text-red-500">{errors.objetivoERS.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.objetivoERS.message}
+            </p>
           )}
         </div>
 
@@ -253,9 +289,9 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="data">Data *</Label>
           <Input
             id="data"
-            {...register('data')}
+            {...register("data")}
             placeholder="dd/mm/aaaa"
-            className={errors.data ? 'border-red-500' : ''}
+            className={errors.data ? "border-red-500" : ""}
           />
           {errors.data && (
             <p className="mt-1 text-sm text-red-500">{errors.data.message}</p>
@@ -267,11 +303,13 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Input
             id="autorEmail"
             type="email"
-            {...register('autorEmail')}
-            className={errors.autorEmail ? 'border-red-500' : ''}
+            {...register("autorEmail")}
+            className={errors.autorEmail ? "border-red-500" : ""}
           />
           {errors.autorEmail && (
-            <p className="mt-1 text-sm text-red-500">{errors.autorEmail.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.autorEmail.message}
+            </p>
           )}
         </div>
 
@@ -279,17 +317,35 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
           <Label htmlFor="descricao">Descrição *</Label>
           <Input
             id="descricao"
-            {...register('descricao')}
-            className={errors.descricao ? 'border-red-500' : ''}
+            {...register("descricao")}
+            className={errors.descricao ? "border-red-500" : ""}
           />
           {errors.descricao && (
-            <p className="mt-1 text-sm text-red-500">{errors.descricao.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.descricao.message}
+            </p>
           )}
         </div>
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit">Salvar Dados Gerais</Button>
+        <Button type="submit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 mr-1.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+            />
+          </svg>
+          Salvar Dados Gerais
+        </Button>
       </div>
     </form>
   );

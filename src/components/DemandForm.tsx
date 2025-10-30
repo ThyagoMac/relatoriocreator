@@ -15,6 +15,7 @@ import type {
   DeveloperLevel,
   ComplexityLevel,
   Demand,
+  Evidence,
 } from "../types/report";
 import { imageToBase64 } from "../utils/storage";
 
@@ -88,7 +89,35 @@ export function DemandForm({
   // Calcula os valores padrão com useMemo para evitar recálculos desnecessários
   const formDefaultValues = useMemo((): DemandFormData => {
     if (initialData) {
-      return initialData;
+      // Migra dados antigos para o novo formato se necessário
+      if (initialData.evidencias && initialData.evidencias.length > 0) {
+        return initialData;
+      }
+      // Se tem dados antigos, migra para o novo formato
+      if (initialData.evidenciaImagem || initialData.evidenciaTexto) {
+        return {
+          ...initialData,
+          evidencias: [
+            {
+              id: crypto.randomUUID(),
+              imagens: initialData.evidenciaImagem
+                ? [initialData.evidenciaImagem]
+                : [],
+              descricao: initialData.evidenciaTexto || "",
+            },
+          ],
+        };
+      }
+      return {
+        ...initialData,
+        evidencias: [
+          {
+            id: crypto.randomUUID(),
+            imagens: [],
+            descricao: "",
+          },
+        ],
+      };
     }
     return {
       id: crypto.randomUUID(),
@@ -109,8 +138,13 @@ export function DemandForm({
       perfilDesenvolvedor: (defaultPerfilDesenvolvedor ||
         "Pleno") as DeveloperLevel,
       complexidadeDemanda: "Baixa" as ComplexityLevel,
-      evidenciaImagem: null,
-      evidenciaTexto: "",
+      evidencias: [
+        {
+          id: crypto.randomUUID(),
+          imagens: [],
+          descricao: "",
+        },
+      ],
     };
   }, [
     initialData,
@@ -140,7 +174,7 @@ export function DemandForm({
   }, [formDefaultValues, reset]);
 
   const atividadesRealizadas = watch("atividadesRealizadas") || [];
-  const evidenciaImagem = watch("evidenciaImagem");
+  const evidencias = watch("evidencias") || [];
 
   const handleActivityToggle = (activity: ActivityType) => {
     const current = atividadesRealizadas;
@@ -154,23 +188,93 @@ export function DemandForm({
     }
   };
 
-  const handleImageUpload = async (file: File | null) => {
-    if (file) {
-      try {
-        const base64 = await imageToBase64(file);
-        setValue("evidenciaImagem", base64);
-      } catch (error) {
-        console.error("Erro ao fazer upload da imagem:", error);
+  const addEvidence = () => {
+    const currentEvidencias = evidencias;
+    const newEvidence: Evidence = {
+      id: crypto.randomUUID(),
+      imagens: [],
+      descricao: "",
+    };
+    setValue("evidencias", [...currentEvidencias, newEvidence]);
+  };
+
+  const removeEvidence = (evidenceId: string) => {
+    const currentEvidencias = evidencias;
+    setValue(
+      "evidencias",
+      currentEvidencias.filter((e) => e.id !== evidenceId)
+    );
+  };
+
+  const handleMultipleImagesUpload = async (
+    files: File[],
+    evidenceId: string
+  ) => {
+    if (files.length === 0) return;
+
+    try {
+      const base64Promises = files.map((file) => imageToBase64(file));
+      const base64Images = await Promise.all(base64Promises);
+
+      const currentEvidencias = evidencias;
+      const evidenceIndex = currentEvidencias.findIndex(
+        (e) => e.id === evidenceId
+      );
+
+      if (evidenceIndex !== -1) {
+        const updatedEvidencias = [...currentEvidencias];
+        updatedEvidencias[evidenceIndex] = {
+          ...updatedEvidencias[evidenceIndex],
+          imagens: [
+            ...updatedEvidencias[evidenceIndex].imagens,
+            ...base64Images,
+          ],
+        };
+        setValue("evidencias", updatedEvidencias);
       }
-    } else {
-      setValue("evidenciaImagem", null);
+    } catch (error) {
+      console.error("Erro ao fazer upload das imagens:", error);
+    }
+  };
+
+  const removeImage = (evidenceId: string, imageIndex: number) => {
+    const currentEvidencias = evidencias;
+    const evidenceIndex = currentEvidencias.findIndex(
+      (e) => e.id === evidenceId
+    );
+
+    if (evidenceIndex !== -1) {
+      const updatedEvidencias = [...currentEvidencias];
+      updatedEvidencias[evidenceIndex] = {
+        ...updatedEvidencias[evidenceIndex],
+        imagens: updatedEvidencias[evidenceIndex].imagens.filter(
+          (_, idx) => idx !== imageIndex
+        ),
+      };
+      setValue("evidencias", updatedEvidencias);
+    }
+  };
+
+  const updateEvidenceDescription = (evidenceId: string, descricao: string) => {
+    const currentEvidencias = evidencias;
+    const evidenceIndex = currentEvidencias.findIndex(
+      (e) => e.id === evidenceId
+    );
+
+    if (evidenceIndex !== -1) {
+      const updatedEvidencias = [...currentEvidencias];
+      updatedEvidencias[evidenceIndex] = {
+        ...updatedEvidencias[evidenceIndex],
+        descricao,
+      };
+      setValue("evidencias", updatedEvidencias);
     }
   };
 
   const onFormSubmit = (data: DemandFormData) => {
     const demand: Demand = {
       ...data,
-      evidenciaImagem: data.evidenciaImagem || null,
+      evidencias: data.evidencias || [],
     };
     onSubmit(demand);
   };
@@ -425,42 +529,144 @@ export function DemandForm({
       </div>
 
       <div>
-        <Label htmlFor="evidenciaImagem">
-          Evidência da Configuração e/ou Desenvolvimento (imagem)
-        </Label>
-        <div className="mt-2">
-          <Input
-            id="evidenciaImagem"
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleImageUpload(e.target.files?.[0] || null)}
-            className="cursor-pointer"
-          />
-          {evidenciaImagem && (
-            <div className="mt-4">
-              <img
-                src={evidenciaImagem}
-                alt="Evidência"
-                className="max-h-64 w-auto object-contain border border-gray-300 rounded"
-              />
-            </div>
-          )}
+        <div className="flex items-center justify-between mb-4">
+          <Label>Evidências da Configuração e/ou Desenvolvimento *</Label>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={addEvidence}
+            className="text-sm"
+          >
+            + Adicionar Evidência
+          </Button>
         </div>
-      </div>
 
-      <div>
-        <Label htmlFor="evidenciaTexto">
-          Evidência da Configuração e/ou Desenvolvimento (texto) *
-        </Label>
-        <Textarea
-          id="evidenciaTexto"
-          {...register("evidenciaTexto")}
-          rows={4}
-          className={errors.evidenciaTexto ? "border-red-500" : ""}
-        />
-        {errors.evidenciaTexto && (
-          <p className="mt-1 text-sm text-red-500">
-            {errors.evidenciaTexto.message}
+        {evidencias.length === 0 && (
+          <p className="text-sm text-gray-500 mb-4">
+            Nenhuma evidência adicionada. Clique em "Adicionar Evidência" para
+            começar.
+          </p>
+        )}
+
+        <div className="space-y-6">
+          {evidencias.map((evidence, evidenceIndex) => (
+            <div
+              key={evidence.id}
+              className="border border-gray-300 rounded-lg p-4 space-y-4 bg-gray-50"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Evidência {evidenceIndex + 1}
+                </h3>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => removeEvidence(evidence.id)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 mr-1.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  Remover Evidência
+                </Button>
+              </div>
+
+              <div>
+                <Label>
+                  Imagens{" "}
+                  {evidence.imagens.length > 0 &&
+                    `(${evidence.imagens.length})`}
+                </Label>
+                <div className="mt-2 space-y-2">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files || []);
+                      if (files.length > 0) {
+                        handleMultipleImagesUpload(files, evidence.id);
+                      }
+                      // Limpa o input para permitir selecionar as mesmas imagens novamente
+                      e.target.value = "";
+                    }}
+                    className="cursor-pointer"
+                  />
+
+                  {evidence.imagens.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                      {evidence.imagens.map((imagem, imgIndex) => (
+                        <div key={imgIndex} className="relative group">
+                          <img
+                            src={imagem}
+                            alt={`Evidência ${evidenceIndex + 1} - Imagem ${
+                              imgIndex + 1
+                            }`}
+                            className="w-full h-48 object-contain border border-gray-300 rounded bg-white"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeImage(evidence.id, imgIndex)}
+                            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
+                            title="Remover imagem"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor={`evidencia-descricao-${evidence.id}`}>
+                  Descrição da Evidência *
+                </Label>
+                <Textarea
+                  id={`evidencia-descricao-${evidence.id}`}
+                  value={evidence.descricao}
+                  onChange={(e) =>
+                    updateEvidenceDescription(evidence.id, e.target.value)
+                  }
+                  rows={4}
+                  className="mt-2"
+                />
+                {errors.evidencias?.[evidenceIndex]?.descricao && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.evidencias[evidenceIndex]?.descricao?.message}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {errors.evidencias && typeof errors.evidencias.message === "string" && (
+          <p className="mt-2 text-sm text-red-500">
+            {errors.evidencias.message}
           </p>
         )}
       </div>
@@ -469,7 +675,23 @@ export function DemandForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit">Salvar Demanda</Button>
+        <Button type="submit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 mr-1.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          Salvar Demanda
+        </Button>
       </div>
     </form>
   );

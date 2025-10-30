@@ -180,17 +180,52 @@ export function ReportPreview({ report }: ReportPreviewProps) {
               </div>
 
               <div>
-                <p className="font-semibold">Evidência da Configuração e/ou Desenvolvimento:</p>
-                {demand.evidenciaImagem && (
-                  <div className="mt-4 mb-4">
-                    <img
-                      src={demand.evidenciaImagem}
-                      alt="Evidência"
-                      className="max-w-full h-auto border border-gray-300 rounded"
-                    />
+                <p className="font-semibold mb-4">Evidências da Configuração e/ou Desenvolvimento:</p>
+                {demand.evidencias && demand.evidencias.length > 0 ? (
+                  <div className="space-y-6">
+                    {demand.evidencias.map((evidence, evidenceIndex) => (
+                      <div key={evidence.id} className="space-y-4">
+                        <h4 className="text-lg font-semibold">
+                          Evidência {evidenceIndex + 1}
+                        </h4>
+                        
+                        {evidence.imagens && evidence.imagens.length > 0 && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            {evidence.imagens.map((imagem, imgIndex) => (
+                              <div key={imgIndex}>
+                                <img
+                                  src={imagem}
+                                  alt={`Evidência ${evidenceIndex + 1} - Imagem ${imgIndex + 1}`}
+                                  className="max-w-full h-auto border border-gray-300 rounded"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {evidence.descricao && (
+                          <p className="text-justify mt-2">{evidence.descricao}</p>
+                        )}
+                      </div>
+                    ))}
                   </div>
+                ) : (
+                  // Compatibilidade com dados antigos
+                  <>
+                    {demand.evidenciaImagem && (
+                      <div className="mt-4 mb-4">
+                        <img
+                          src={demand.evidenciaImagem}
+                          alt="Evidência"
+                          className="max-w-full h-auto border border-gray-300 rounded"
+                        />
+                      </div>
+                    )}
+                    {demand.evidenciaTexto && (
+                      <p className="text-justify mt-2">{demand.evidenciaTexto}</p>
+                    )}
+                  </>
                 )}
-                <p className="text-justify mt-2">{demand.evidenciaTexto}</p>
               </div>
 
               {index < demands.length - 1 && (

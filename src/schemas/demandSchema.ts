@@ -51,8 +51,18 @@ export const demandSchema = z.object({
       message: 'Complexidade da demanda é obrigatória',
     }
   ),
-  evidenciaImagem: z.string().nullable(),
-  evidenciaTexto: z.string().min(1, 'Evidência (texto) é obrigatória'),
+  evidencias: z
+    .array(
+      z.object({
+        id: z.string(),
+        imagens: z.array(z.string()),
+        descricao: z.string().min(1, 'Descrição da evidência é obrigatória'),
+      })
+    )
+    .min(1, 'Pelo menos uma evidência é obrigatória'),
+  // Campos antigos para compatibilidade (deprecated)
+  evidenciaImagem: z.string().nullable().optional(),
+  evidenciaTexto: z.string().optional(),
 });
 
 export type DemandFormData = z.infer<typeof demandSchema>;

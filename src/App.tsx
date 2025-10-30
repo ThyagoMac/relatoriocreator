@@ -118,6 +118,7 @@ function App() {
                 demands={demands}
                 onDemandsChange={handleDemandsChange}
                 defaultResponsavelTecnico={generalData.responsavelTecnico}
+                onNavigateToPreview={() => setActiveTab("preview")}
               />
             </div>
           </Tabs.Content>
