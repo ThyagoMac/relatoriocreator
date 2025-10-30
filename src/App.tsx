@@ -1,41 +1,136 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from "react";
+import * as Tabs from "@radix-ui/react-tabs";
+import { GeneralDataForm } from "./components/GeneralDataForm";
+import { DemandList } from "./components/DemandList";
+import { ReportExport } from "./components/ReportExport";
+import type { GeneralData, Demand, Report } from "./types/report";
+import {
+  loadGeneralData,
+  loadDemands,
+  getDefaultGeneralData,
+} from "./utils/storage";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [generalData, setGeneralData] = useState<GeneralData>(
+    getDefaultGeneralData()
+  );
+  const [demands, setDemands] = useState<Demand[]>([]);
+  const [activeTab, setActiveTab] = useState("general");
+
+  useEffect(() => {
+    const storedGeneralData = loadGeneralData();
+    const storedDemands = loadDemands();
+    if (storedGeneralData) {
+      setGeneralData(storedGeneralData);
+    }
+    if (storedDemands) {
+      setDemands(storedDemands);
+    }
+  }, []);
+
+  const handleGeneralDataSave = (data: GeneralData) => {
+    setGeneralData(data);
+    setActiveTab("demands");
+  };
+
+  const handleDemandsChange = (updatedDemands: Demand[]) => {
+    setDemands(updatedDemands);
+  };
+
+  const report: Report = {
+    generalData,
+    demands,
+  };
+
+  const isGeneralDataComplete = () => {
+    return (
+      generalData.nomeUsuario &&
+      generalData.prepostoGerente &&
+      generalData.responsavelTecnico &&
+      generalData.fiscalContrato &&
+      generalData.titulo &&
+      generalData.subtitulo &&
+      generalData.objetivoArtefato &&
+      generalData.numeroContrato &&
+      generalData.numeroOS &&
+      generalData.detalhamentoOS &&
+      generalData.objetivoERS &&
+      generalData.data &&
+      generalData.autorEmail &&
+      generalData.descricao
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
-      <div className="text-center">
-        <div className="flex gap-8 justify-center mb-8">
-          <a href="https://vite.dev" target="_blank">
-            <img src={viteLogo} className="h-24 w-24 hover:drop-shadow-lg transition-all" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="h-24 w-24 hover:drop-shadow-lg transition-all animate-spin-slow" alt="React logo" />
-          </a>
-        </div>
-        <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-8">
-          Vite + React
-        </h1>
-        <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
-          <button 
-            onClick={() => setCount((count) => count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors mb-4"
-          >
-            count is {count}
-          </button>
-          <p className="text-gray-600 dark:text-gray-400">
-            Edit <code className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">src/App.tsx</code> and save to test HMR
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <h1 className="text-2xl font-bold text-gray-900">
+            Gerador de Relatório Técnico
+          </h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Preencha os dados gerais, adicione demandas e exporte seu relatório
           </p>
         </div>
-        <p className="mt-8 text-gray-500 dark:text-gray-500">
-          Click on the Vite and React logos to learn more
-        </p>
-      </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Tabs.Root
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
+          <Tabs.List className="flex space-x-1 border-b border-gray-200">
+            <Tabs.Trigger
+              value="general"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600"
+            >
+              1. Dados Gerais
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              value="demands"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!isGeneralDataComplete()}
+            >
+              2. Demandas
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              value="preview"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!isGeneralDataComplete() || demands.length === 0}
+            >
+              3. Preview e Exportação
+            </Tabs.Trigger>
+          </Tabs.List>
+
+          <Tabs.Content value="general" className="mt-6">
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-xl font-bold mb-6">
+                Dados Gerais do Relatório
+              </h2>
+              <GeneralDataForm onSave={handleGeneralDataSave} />
+            </div>
+          </Tabs.Content>
+
+          <Tabs.Content value="demands" className="mt-6">
+            <div className="bg-white rounded-lg shadow p-6">
+              <DemandList
+                demands={demands}
+                onDemandsChange={handleDemandsChange}
+                defaultResponsavelTecnico={generalData.responsavelTecnico}
+              />
+            </div>
+          </Tabs.Content>
+
+          <Tabs.Content value="preview" className="mt-6">
+            <div className="bg-white rounded-lg shadow p-6">
+              <ReportExport report={report} />
+            </div>
+          </Tabs.Content>
+        </Tabs.Root>
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
