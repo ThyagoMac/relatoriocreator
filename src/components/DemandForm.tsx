@@ -590,20 +590,51 @@ export function DemandForm({
                     `(${evidence.imagens.length})`}
                 </Label>
                 <div className="mt-2 space-y-2">
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => {
-                      const files = Array.from(e.target.files || []);
-                      if (files.length > 0) {
-                        handleMultipleImagesUpload(files, evidence.id);
+                  <div
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      const items = e.clipboardData.items;
+                      const imageFiles: File[] = [];
+
+                      for (let i = 0; i < items.length; i++) {
+                        const item = items[i];
+                        if (item.type.startsWith("image/")) {
+                          const file = item.getAsFile();
+                          if (file) {
+                            imageFiles.push(file);
+                          }
+                        }
                       }
-                      // Limpa o input para permitir selecionar as mesmas imagens novamente
-                      e.target.value = "";
+
+                      if (imageFiles.length > 0) {
+                        handleMultipleImagesUpload(imageFiles, evidence.id);
+                      }
                     }}
-                    className="cursor-pointer"
-                  />
+                    tabIndex={0}
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  >
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files || []);
+                        if (files.length > 0) {
+                          handleMultipleImagesUpload(files, evidence.id);
+                        }
+                        // Limpa o input para permitir selecionar as mesmas imagens novamente
+                        e.target.value = "";
+                      }}
+                      className="cursor-pointer"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Arraste arquivos ou clique no campo acima para adicionar
+                      imagem. <br /> Ou clicke{" "}
+                      <span className="text-blue-500 font-bold">AQUI</span> para
+                      selecionar e depois CTRL+V para colar imagens que estejam
+                      salva na memoria do seu sistema operacional.
+                    </p>
+                  </div>
 
                   {evidence.imagens.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
