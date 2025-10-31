@@ -48,10 +48,10 @@ export function DemandList({
     }
   };
 
-  const confirmDeleteDemand = () => {
+  const confirmDeleteDemand = async () => {
     if (demandToDelete) {
       const updatedDemands = demands.filter((d) => d.id !== demandToDelete.id);
-      saveDemands(updatedDemands);
+      await saveDemands(updatedDemands);
       onDemandsChange(updatedDemands);
       setIsDeleteDialogOpen(false);
       setDemandToDelete(null);
@@ -63,14 +63,14 @@ export function DemandList({
     setDemandToDelete(null);
   };
 
-  const handleSaveDemand = (demand: Demand) => {
+  const handleSaveDemand = async (demand: Demand) => {
     let updatedDemands: Demand[];
     if (editingDemand) {
       updatedDemands = demands.map((d) => (d.id === demand.id ? demand : d));
     } else {
       updatedDemands = [...demands, demand];
     }
-    saveDemands(updatedDemands);
+    await saveDemands(updatedDemands);
     onDemandsChange(updatedDemands);
     setIsDialogOpen(false);
     setEditingDemand(null);
@@ -256,6 +256,11 @@ export function DemandList({
             <DialogTitle>
               {editingDemand ? "Editar Demanda" : "Nova Demanda"}
             </DialogTitle>
+            <DialogDescription>
+              {editingDemand
+                ? "Edite os campos abaixo para atualizar a demanda."
+                : "Preencha os campos abaixo para adicionar uma nova demanda ao relatório."}
+            </DialogDescription>
           </DialogHeader>
           <DemandForm
             initialData={editingDemand || undefined}

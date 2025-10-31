@@ -16,6 +16,7 @@ import {
   imageToBase64,
 } from "../utils/storage";
 import type { GeneralData } from "../types/report";
+import { formatCurrentDate } from "../utils/date";
 
 interface GeneralDataFormProps {
   onSave: (data: GeneralData) => void;
@@ -30,22 +31,27 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
     watch,
   } = useForm<GeneralDataFormData>({
     resolver: zodResolver(generalDataSchema),
-    defaultValues: (() => {
-      const stored = loadGeneralData();
-      return stored ? (stored as GeneralDataFormData) : getDefaultGeneralData();
-    })(),
+    defaultValues: getDefaultGeneralData(),
   });
 
   const logoEmpresa = watch("logoEmpresa");
   const imagemCapa = watch("imagemCapa");
 
   useEffect(() => {
-    const stored = loadGeneralData();
-    if (stored) {
-      Object.entries(stored).forEach(([key, value]) => {
-        setValue(key as keyof GeneralDataFormData, value as any);
-      });
-    }
+    const loadData = async () => {
+      const stored = await loadGeneralData();
+      if (stored) {
+        Object.entries(stored).forEach(([key, value]) => {
+          // Não carrega a data do localStorage, sempre usa a data de hoje
+          if (key !== "data") {
+            setValue(key as keyof GeneralDataFormData, value as any);
+          }
+        });
+      }
+      // Sempre define a data de hoje, independente do que está salvo
+      setValue("data", formatCurrentDate());
+    };
+    loadData();
   }, [setValue]);
 
   const handleImageUpload = async (
@@ -64,13 +70,13 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
     }
   };
 
-  const onSubmit = (data: GeneralDataFormData) => {
+  const onSubmit = async (data: GeneralDataFormData) => {
     const generalData: GeneralData = {
       ...data,
       logoEmpresa: data.logoEmpresa || null,
       imagemCapa: data.imagemCapa || null,
     };
-    saveGeneralData(generalData);
+    await saveGeneralData(generalData);
     onSave(generalData);
   };
 
@@ -293,6 +299,26 @@ export function GeneralDataForm({ onSave }: GeneralDataFormProps) {
             placeholder="dd/mm/aaaa"
             className={errors.data ? "border-red-500" : ""}
           />
+          <div className="mt-2 flex items-start gap-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-blue-600 shrink-0 mt-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <div className="text-sm text-blue-800">
+              <strong>Aviso:</strong> Este campo está preenchido automaticamente
+              com a data de hoje ({formatCurrentDate()}).
+            </div>
+          </div>
           {errors.data && (
             <p className="mt-1 text-sm text-red-500">{errors.data.message}</p>
           )}

@@ -18,14 +18,17 @@ function App() {
   const [activeTab, setActiveTab] = useState("general");
 
   useEffect(() => {
-    const storedGeneralData = loadGeneralData();
-    const storedDemands = loadDemands();
-    if (storedGeneralData) {
-      setGeneralData(storedGeneralData);
-    }
-    if (storedDemands) {
-      setDemands(storedDemands);
-    }
+    const loadData = async () => {
+      const storedGeneralData = await loadGeneralData();
+      const storedDemands = await loadDemands();
+      if (storedGeneralData) {
+        setGeneralData(storedGeneralData);
+      }
+      if (storedDemands.length > 0) {
+        setDemands(storedDemands);
+      }
+    };
+    loadData();
   }, []);
 
   const handleGeneralDataSave = (data: GeneralData) => {

@@ -1,248 +1,435 @@
-import type { Report } from '../types/report';
+import type { CSSProperties } from "react";
+import type { Report } from "../types/report";
 
 interface ReportPreviewProps {
   report: Report;
 }
 
+const wrapperStyle: CSSProperties = {
+  backgroundColor: "#ffffff",
+  color: "#1f2937",
+  fontFamily: "'Segoe UI', Arial, sans-serif",
+  lineHeight: 1.6,
+};
+
+const pageStyle: CSSProperties = {
+  maxWidth: "800px",
+  margin: "0 auto",
+  padding: "48px 64px",
+};
+
+const coverTitleStyle: CSSProperties = {
+  fontSize: "40px",
+  fontWeight: 700,
+  color: "#0f172a",
+  textAlign: "center",
+  marginBottom: "24px",
+};
+
+const coverSubtitleStyle: CSSProperties = {
+  fontSize: "20px",
+  color: "#475569",
+  textAlign: "center",
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+};
+
+const sectionTitleStyle: CSSProperties = {
+  fontSize: "22px",
+  fontWeight: 700,
+  color: "#0f172a",
+  marginBottom: "20px",
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+};
+
+const infoTableStyle: CSSProperties = {
+  width: "100%",
+  borderCollapse: "collapse",
+  marginTop: "12px",
+};
+
+const infoLabelCellStyle: CSSProperties = {
+  width: "28%",
+  backgroundColor: "#f8fafc",
+  border: "1px solid #cbd5f5",
+  padding: "10px 14px",
+  fontWeight: 600,
+};
+
+const infoValueCellStyle: CSSProperties = {
+  border: "1px solid #cbd5f5",
+  padding: "10px 14px",
+  textAlign: "justify",
+};
+
+const highlightBoxStyle: CSSProperties = {
+  border: "1px solid #e2e8f0",
+  borderRadius: "6px",
+  padding: "16px",
+  backgroundColor: "#fefce8",
+  marginTop: "16px",
+};
+
+const demandHeaderStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  borderBottom: "2px solid #0ea5e9",
+  paddingBottom: "12px",
+  marginBottom: "20px",
+};
+
+const demandTitleStyle: CSSProperties = {
+  fontSize: "18px",
+  fontWeight: 700,
+  color: "#0ea5e9",
+  letterSpacing: "0.08em",
+};
+
+const demandMetaStyle: CSSProperties = {
+  fontSize: "14px",
+  color: "#64748b",
+  textAlign: "right",
+};
+
+const listStyle: CSSProperties = {
+  margin: "8px 0 0 18px",
+  padding: 0,
+};
+
+const listItemStyle: CSSProperties = {
+  marginBottom: "6px",
+};
+
+const approvalCardStyle: CSSProperties = {
+  border: "2px solid #0f172a",
+  borderRadius: "6px",
+  textAlign: "center",
+  marginBottom: "32px",
+};
+
+const approvalHeaderStyle: CSSProperties = {
+  backgroundColor: "#fde68a",
+  borderBottom: "2px solid #0f172a",
+  padding: "12px",
+  fontWeight: 700,
+};
+
+const approvalBodyStyle: CSSProperties = {
+  borderBottom: "2px solid #0f172a",
+  padding: "12px",
+  fontSize: "14px",
+  fontWeight: 600,
+};
+
+const signatureBlockStyle: CSSProperties = {
+  padding: "32px 16px",
+};
+
+const signatureNameStyle: CSSProperties = {
+  borderTop: "2px solid #0f172a",
+  paddingTop: "12px",
+  fontWeight: 700,
+  fontSize: "16px",
+};
+
 export function ReportPreview({ report }: ReportPreviewProps) {
   const { generalData, demands } = report;
 
+  const renderInfoRow = (label: string, value?: string) => {
+    if (!value) {
+      return null;
+    }
+
+    return (
+      <tr>
+        <td style={infoLabelCellStyle}>{label}</td>
+        <td style={infoValueCellStyle}>{value}</td>
+      </tr>
+    );
+  };
+
   return (
-    <div className="bg-white" id="report-preview">
-      {/* Capa */}
-      <div className="min-h-screen p-8 flex flex-col items-center justify-center border-b-2 border-gray-300">
-        {generalData.logoEmpresa && (
-          <div className="mb-8">
-            <img
-              src={generalData.logoEmpresa}
-              alt="Logo da empresa"
-              className="h-24 w-auto object-contain"
-            />
+    <div id="report-preview" style={wrapperStyle}>
+      <div
+        style={{
+          ...pageStyle,
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          pageBreakAfter: "always",
+        }}
+      >
+        <div>
+          <h1 style={coverTitleStyle}>{generalData.titulo}</h1>
+
+          {generalData.imagemCapa && (
+            <div style={{ textAlign: "center", margin: "24px 0" }}>
+              <img
+                src={generalData.imagemCapa}
+                alt="Imagem de capa"
+                style={{ width: "220px", height: "auto", objectFit: "contain" }}
+              />
+            </div>
+          )}
+
+          <div style={{ marginTop: "40px" }}>
+            <p style={coverSubtitleStyle}>{generalData.subtitulo}</p>
+            {generalData.logoEmpresa && (
+              <div style={{ textAlign: "center", marginTop: "24px" }}>
+                <img
+                  src={generalData.logoEmpresa}
+                  alt="Logotipo da empresa"
+                  style={{ maxHeight: "70px", width: "auto", objectFit: "contain" }}
+                />
+              </div>
+            )}
           </div>
-        )}
-        {generalData.imagemCapa && (
-          <div className="mb-8">
-            <img
-              src={generalData.imagemCapa}
-              alt="Capa"
-              className="max-w-2xl w-full h-auto object-contain"
-            />
+
+          <div style={highlightBoxStyle}>
+            <p style={{ fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>
+              Objetivo deste artefato
+            </p>
+            <p>{generalData.objetivoArtefato}</p>
           </div>
-        )}
-        <h1 className="text-4xl font-bold text-center mb-4">{generalData.titulo}</h1>
-        <h2 className="text-2xl text-center mb-8">{generalData.subtitulo}</h2>
-        <div className="mt-16 space-y-2 text-center">
-          <p>
-            <strong>Autor:</strong> {generalData.nomeUsuario} ({generalData.autorEmail})
-          </p>
-          <p>
-            <strong>Data:</strong> {generalData.data}
-          </p>
+        </div>
+
+        <div style={{ marginTop: "48px" }}>
+          <table style={infoTableStyle}>
+            <tbody>
+              {renderInfoRow("Número do contrato", generalData.numeroContrato)}
+              {renderInfoRow("Número da OS", generalData.numeroOS)}
+              {renderInfoRow("Detalhamento da OS", generalData.detalhamentoOS)}
+              {renderInfoRow("Objetivo da ERS", generalData.objetivoERS)}
+            </tbody>
+          </table>
+        </div>
+
+        <div style={{ marginTop: "72px" }}>
+          <table style={infoTableStyle}>
+            <tbody>
+              <tr>
+                <td style={{ ...infoLabelCellStyle, textAlign: "center" }}>Data</td>
+                <td style={{ ...infoLabelCellStyle, textAlign: "center" }}>Autor (e-mail)</td>
+                <td style={{ ...infoLabelCellStyle, textAlign: "center" }}>Descrição</td>
+              </tr>
+              <tr>
+                <td style={{ ...infoValueCellStyle, textAlign: "center" }}>{generalData.data}</td>
+                <td style={{ ...infoValueCellStyle, textAlign: "center" }}>{generalData.autorEmail}</td>
+                <td style={infoValueCellStyle}>{generalData.descricao}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* Dados Gerais */}
-      <div className="p-8 space-y-6">
-        {generalData.logoEmpresa && (
-          <div className="flex justify-center mb-4">
-            <img
-              src={generalData.logoEmpresa}
-              alt="Logo da empresa"
-              className="h-16 w-auto"
-            />
-          </div>
-        )}
+      <div
+        style={{
+          ...pageStyle,
+          pageBreakAfter: demands.length > 0 ? "always" : "auto",
+        }}
+      >
+        <h2 style={sectionTitleStyle}>Visão Geral do Projeto</h2>
+        <table style={infoTableStyle}>
+          <tbody>
+            {renderInfoRow("Responsável Técnico", generalData.responsavelTecnico)}
+            {renderInfoRow("Fiscal do Contrato", generalData.fiscalContrato)}
+            {renderInfoRow("Preposto/Gerente", generalData.prepostoGerente)}
+            {renderInfoRow("Desenvolvedor", generalData.nomeUsuario)}
+          </tbody>
+        </table>
 
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold">Informações Gerais</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="font-semibold">Nome do Usuário:</p>
-              <p>{generalData.nomeUsuario}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Preposto/Gerente de Projetos:</p>
-              <p>{generalData.prepostoGerente}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Responsável Técnico:</p>
-              <p>{generalData.responsavelTecnico}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Fiscal do Contrato:</p>
-              <p>{generalData.fiscalContrato}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Nº do Contrato:</p>
-              <p>{generalData.numeroContrato}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Nº da OS:</p>
-              <p>{generalData.numeroOS}</p>
-            </div>
-            <div className="col-span-2">
-              <p className="font-semibold">Descrição:</p>
-              <p>{generalData.descricao}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold">Objetivo deste artefato</h3>
-          <p className="text-justify">{generalData.objetivoArtefato}</p>
-        </div>
-
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold">Detalhamento da OS</h3>
-          <p className="text-justify">{generalData.detalhamentoOS}</p>
-        </div>
-
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold">Objetivo(s) desta ERS</h3>
-          <p className="text-justify">{generalData.objetivoERS}</p>
+        <div style={highlightBoxStyle}>
+          <p style={{ fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>
+            Resumo executivo
+          </p>
+          <p style={{ textAlign: "justify" }}>{generalData.descricao}</p>
         </div>
       </div>
 
-      {/* Demandas */}
       {demands.length > 0 && (
-        <div className="p-8 space-y-8">
-          <div className="h-px bg-gray-300" />
-          <h2 className="text-2xl font-bold">Demandas Desenvolvidas</h2>
-
+        <div>
           {demands.map((demand, index) => (
-            <div key={demand.id} className="space-y-4 page-break-inside-avoid">
-              <div className="border-t-2 border-gray-400 pt-4">
-                <h3 className="text-xl font-bold mb-4">
-                  Demanda {index + 1}: {demand.titulo}
+            <div
+              key={demand.id}
+              style={{
+                ...pageStyle,
+                pageBreakBefore: index === 0 ? "always" : "always",
+              }}
+            >
+              <div style={demandHeaderStyle}>
+                <h3 style={demandTitleStyle}>
+                  DEMANDA {String(index + 1).padStart(2, "0")}
                 </h3>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="font-semibold">Nível de prioridade:</p>
-                  <p>{demand.nivelPrioridade}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Tipo da demanda:</p>
-                  <p>{demand.tipoDemanda}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Demanda solicitada via:</p>
-                  <p>{demand.demandaSolicitadaVia}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Responsável Técnico:</p>
-                  <p>{demand.responsavelTecnico}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Perfil do desenvolvedor:</p>
-                  <p>{demand.perfilDesenvolvedor}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Complexidade da demanda:</p>
-                  <p>{demand.complexidadeDemanda}</p>
+                <div style={demandMetaStyle}>
+                  <div>{demand.responsavelTecnico}</div>
+                  <div>{demand.nomeFuncionalidadeTela}</div>
                 </div>
               </div>
 
-              <div>
-                <p className="font-semibold">Atividades realizadas:</p>
-                <ul className="list-disc list-inside ml-4">
-                  {demand.atividadesRealizadas.map((activity, idx) => (
-                    <li key={idx}>( x ) {activity}</li>
-                  ))}
-                </ul>
-              </div>
+              <table style={infoTableStyle}>
+                <tbody>
+                  {renderInfoRow("Prioridade", demand.nivelPrioridade)}
+                  {renderInfoRow("Tipo de demanda", demand.tipoDemanda)}
+                  {renderInfoRow("Solicitação via", demand.demandaSolicitadaVia)}
+                  {renderInfoRow("Perfil do desenvolvedor", demand.perfilDesenvolvedor)}
+                  {renderInfoRow("Complexidade", demand.complexidadeDemanda)}
+                  {renderInfoRow("Ambiente DSV", demand.ambienteDSV)}
+                  {renderInfoRow("Ferramentas/Tecnologias", demand.ferramentasTecnologias)}
+                  {renderInfoRow(
+                    "Repositório",
+                    demand.repositorioImplementacoes
+                  )}
+                </tbody>
+              </table>
 
-              <div>
-                <p className="font-semibold">Breve descrição das atividades:</p>
-                <p className="text-justify mt-2">{demand.breveDescricao}</p>
-              </div>
-
-              <div>
-                <p className="font-semibold">Ferramentas e Tecnologias utilizadas:</p>
-                <p className="mt-2">{demand.ferramentasTecnologias}</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="font-semibold">Ambiente dsv:</p>
-                  <p>{demand.ambienteDSV}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Repositório com as implementações:</p>
-                  <p>{demand.repositorioImplementacoes}</p>
-                </div>
-              </div>
-
-              <div>
-                <p className="font-semibold">Nome da Funcionalidade/Tela:</p>
-                <p>{demand.nomeFuncionalidadeTela}</p>
-              </div>
-
-              <div>
-                <p className="font-semibold mb-4">Evidências da Configuração e/ou Desenvolvimento:</p>
-                {demand.evidencias && demand.evidencias.length > 0 ? (
-                  <div className="space-y-6">
-                    {demand.evidencias.map((evidence, evidenceIndex) => (
-                      <div key={evidence.id} className="space-y-4">
-                        <h4 className="text-lg font-semibold">
-                          Evidência {evidenceIndex + 1}
-                        </h4>
-                        
-                        {evidence.imagens && evidence.imagens.length > 0 && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            {evidence.imagens.map((imagem, imgIndex) => (
-                              <div key={imgIndex}>
-                                <img
-                                  src={imagem}
-                                  alt={`Evidência ${evidenceIndex + 1} - Imagem ${imgIndex + 1}`}
-                                  className="max-w-full h-auto border border-gray-300 rounded"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        
-                        {evidence.descricao && (
-                          <p className="text-justify mt-2">{evidence.descricao}</p>
-                        )}
-                      </div>
+              {demand.atividadesRealizadas.length > 0 && (
+                <div style={{ marginTop: "28px" }}>
+                  <p style={{ fontWeight: 700, marginBottom: "10px", color: "#0f172a" }}>
+                    Atividades realizadas
+                  </p>
+                  <ul style={listStyle}>
+                    {demand.atividadesRealizadas.map((activity, idx) => (
+                      <li key={idx} style={listItemStyle}>
+                        {activity}
+                      </li>
                     ))}
-                  </div>
-                ) : (
-                  // Compatibilidade com dados antigos
-                  <>
+                  </ul>
+                </div>
+              )}
+
+              {demand.breveDescricao && (
+                <div style={{ ...highlightBoxStyle, marginTop: "28px" }}>
+                  <p style={{ fontWeight: 700, marginBottom: "10px", color: "#b45309" }}>
+                    Resumo das entregas
+                  </p>
+                  <p>{demand.breveDescricao}</p>
+                </div>
+              )}
+
+              {demand.evidencias && demand.evidencias.length > 0 ? (
+                <div style={{ marginTop: "28px" }}>
+                  <p style={{ fontWeight: 700, marginBottom: "10px", color: "#0f172a" }}>
+                    Evidências
+                  </p>
+                  {demand.evidencias.map((evidence) => (
+                    <div key={evidence.id} style={{ marginBottom: "24px" }}>
+                      {evidence.imagens &&
+                        evidence.imagens.map((imageSrc, imgIndex) => (
+                          <div
+                            key={`${evidence.id}-img-${imgIndex}`}
+                            style={{ border: "1px solid #e2e8f0", marginBottom: "12px" }}
+                          >
+                            <img
+                              src={imageSrc}
+                              alt="Evidência"
+                              style={{ width: "100%", height: "auto" }}
+                            />
+                          </div>
+                        ))}
+                      {evidence.descricao && (
+                        <p style={{ textAlign: "justify" }}>{evidence.descricao}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                (demand.evidenciaImagem || demand.evidenciaTexto) && (
+                  <div style={{ marginTop: "28px" }}>
+                    <p style={{ fontWeight: 700, marginBottom: "10px", color: "#0f172a" }}>
+                      Evidências
+                    </p>
                     {demand.evidenciaImagem && (
-                      <div className="mt-4 mb-4">
+                      <div style={{ border: "1px solid #e2e8f0", marginBottom: "12px" }}>
                         <img
                           src={demand.evidenciaImagem}
                           alt="Evidência"
-                          className="max-w-full h-auto border border-gray-300 rounded"
+                          style={{ width: "100%", height: "auto" }}
                         />
                       </div>
                     )}
                     {demand.evidenciaTexto && (
-                      <p className="text-justify mt-2">{demand.evidenciaTexto}</p>
+                      <p style={{ textAlign: "justify" }}>{demand.evidenciaTexto}</p>
                     )}
-                  </>
-                )}
-              </div>
-
-              {index < demands.length - 1 && (
-                <div className="h-px bg-gray-300 my-8" />
+                  </div>
+                )
               )}
             </div>
           ))}
         </div>
       )}
 
-      {/* Rodapé com logo em todas as páginas */}
+      <div
+        style={{
+          ...pageStyle,
+          pageBreakBefore: "always",
+        }}
+      >
+        <h2 style={sectionTitleStyle}>Aprovação</h2>
+
+        <div style={approvalCardStyle}>
+          <div style={approvalHeaderStyle}>AUTORIZADO POR</div>
+          <div style={approvalBodyStyle}>Fiscal do Contrato</div>
+          <div style={signatureBlockStyle}>
+            <p style={signatureNameStyle}>{generalData.fiscalContrato}</p>
+          </div>
+        </div>
+
+        <div style={approvalCardStyle}>
+          <div style={approvalHeaderStyle}>AUTORIZADO POR</div>
+          <div style={approvalBodyStyle}>Responsável Técnico</div>
+          <div style={signatureBlockStyle}>
+            <p style={signatureNameStyle}>{generalData.responsavelTecnico}</p>
+          </div>
+        </div>
+
+        <div style={approvalCardStyle}>
+          <div style={{ ...approvalHeaderStyle, backgroundColor: "#fcd34d" }}>
+            CONTRATADA: IBROWSE
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              borderBottom: "2px solid #0f172a",
+            }}
+          >
+            <div
+              style={{
+                flex: "1 1 50%",
+                minWidth: "240px",
+                borderRight: "2px solid #0f172a",
+                padding: "24px 16px 8px",
+              }}
+            >
+              <div style={{ height: "120px" }} />
+              <div style={signatureNameStyle}>
+                {generalData.prepostoGerente}
+              </div>
+              <p style={{ fontSize: "12px", marginTop: "6px" }}>
+                Preposto/Gerente de Projetos
+              </p>
+            </div>
+            <div
+              style={{ flex: "1 1 50%", minWidth: "240px", padding: "24px 16px 8px" }}
+            >
+              <div style={{ height: "120px" }} />
+              <div style={signatureNameStyle}>{generalData.nomeUsuario}</div>
+              <p style={{ fontSize: "12px", marginTop: "6px" }}>Desenvolvedor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <style>{`
         @media print {
           @page {
-            margin: 2cm;
+            margin: 18mm;
           }
-          .page-break-inside-avoid {
+          div[style*="page-break-before"],
+          div[style*="page-break-after"] {
             page-break-inside: avoid;
           }
         }

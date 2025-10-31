@@ -163,6 +163,7 @@ export function DemandForm({
     setValue,
     watch,
     reset,
+    getValues,
   } = useForm<DemandFormData>({
     resolver: zodResolver(demandSchema),
     defaultValues: formDefaultValues,
@@ -189,7 +190,7 @@ export function DemandForm({
   };
 
   const addEvidence = () => {
-    const currentEvidencias = evidencias;
+    const currentEvidencias = getValues("evidencias") || [];
     const newEvidence: Evidence = {
       id: crypto.randomUUID(),
       imagens: [],
@@ -199,7 +200,7 @@ export function DemandForm({
   };
 
   const removeEvidence = (evidenceId: string) => {
-    const currentEvidencias = evidencias;
+    const currentEvidencias = getValues("evidencias") || [];
     setValue(
       "evidencias",
       currentEvidencias.filter((e) => e.id !== evidenceId)
@@ -216,7 +217,7 @@ export function DemandForm({
       const base64Promises = files.map((file) => imageToBase64(file));
       const base64Images = await Promise.all(base64Promises);
 
-      const currentEvidencias = evidencias;
+      const currentEvidencias = getValues("evidencias") || [];
       const evidenceIndex = currentEvidencias.findIndex(
         (e) => e.id === evidenceId
       );
@@ -238,7 +239,7 @@ export function DemandForm({
   };
 
   const removeImage = (evidenceId: string, imageIndex: number) => {
-    const currentEvidencias = evidencias;
+    const currentEvidencias = getValues("evidencias") || [];
     const evidenceIndex = currentEvidencias.findIndex(
       (e) => e.id === evidenceId
     );
@@ -256,7 +257,7 @@ export function DemandForm({
   };
 
   const updateEvidenceDescription = (evidenceId: string, descricao: string) => {
-    const currentEvidencias = evidencias;
+    const currentEvidencias = getValues("evidencias") || [];
     const evidenceIndex = currentEvidencias.findIndex(
       (e) => e.id === evidenceId
     );
