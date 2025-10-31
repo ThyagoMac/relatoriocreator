@@ -293,234 +293,404 @@ const PDFDocument = ({ report }: { report: Report }) => {
 
       {/* Páginas de Demandas */}
       {demands.map((demand, index) => (
-        <Page key={demand.id} size="A4" style={styles.page}>
-          <View style={styles.demandSection}>
-            <Text style={styles.demandTitle}>
-              • DEMANDA {String(index + 1).padStart(2, "0")}.
-            </Text>
-            <View style={styles.gridWithBorder}>
-              <View style={styles.gridItem}>
-                <Text style={styles.fieldLabel}>Nível de prioridade:</Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.nivelPrioridade === "Urgente" ? "x" : " "}) Urgente
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.nivelPrioridade === "Alta" ? "x" : " "}) Alta
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.nivelPrioridade === "Média" ? "x" : " "}) Média
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.nivelPrioridade === "Baixa" ? "x" : " "}) Baixa
-                </Text>
-              </View>
-
-              <View style={styles.gridItem}>
-                <Text style={styles.fieldLabel}>Tipo de demanda:</Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.tipoDemanda === "Configuração" ? "x" : " "})
-                  Configuração
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.tipoDemanda === "Nova demanda" ? "x" : " "}) Nova
-                  demanda
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.tipoDemanda === "Sustentação" ? "x" : " "})
-                  Sustentação
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.tipoDemanda === "Garantia" ? "x" : " "}) Garantia
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.gridWithBorder}>
-              <View style={styles.gridItem}>
-                <Text style={styles.fieldLabel}>Demanda solicitada via:</Text>
-                <Text style={styles.fieldValue}>
-                  (
-                  {demand.demandaSolicitadaVia === "Levantamento de Requisitos"
-                    ? "x"
-                    : " "}
-                  ) Levantamento de Requisitos
-                </Text>
-                <Text style={styles.fieldValue}>
-                  (
-                  {demand.demandaSolicitadaVia === "Inspeção de Sistemas"
-                    ? "x"
-                    : " "}
-                  ) Inspeção de Sistemas
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.demandaSolicitadaVia === "E-mail" ? "x" : " "})
-                  E-mail
-                </Text>
-              </View>
-
-              <View style={styles.gridItem}>
-                <Text style={styles.fieldLabel}>Atividades realizadas:</Text>
-                {demand.atividadesRealizadas.map((activity, idx) => (
-                  <Text key={idx} style={styles.fieldValue}>
-                    ( x ) {activity}
+        <>
+          <Page key={demand.id} size="A4" style={styles.page}>
+            <View style={styles.demandSection}>
+              <Text style={styles.demandTitle}>
+                • DEMANDA {String(index + 1).padStart(2, "0")}.
+              </Text>
+              <View style={styles.gridWithBorder}>
+                <View style={styles.gridItem}>
+                  <Text style={styles.fieldLabel}>Nível de prioridade:</Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.nivelPrioridade === "Urgente"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.nivelPrioridade === "Urgente" ? "x" : " "}) Urgente
                   </Text>
-                ))}
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.nivelPrioridade === "Alta"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.nivelPrioridade === "Alta" ? "x" : " "}) Alta
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.nivelPrioridade === "Média"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.nivelPrioridade === "Média" ? "x" : " "}) Média
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.nivelPrioridade === "Baixa"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.nivelPrioridade === "Baixa" ? "x" : " "}) Baixa
+                  </Text>
+                </View>
+
+                <View style={styles.gridItem}>
+                  <Text style={styles.fieldLabel}>Tipo de demanda:</Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.tipoDemanda === "Configuração"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.tipoDemanda === "Configuração" ? "x" : " "})
+                    Configuração
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.tipoDemanda === "Nova demanda"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.tipoDemanda === "Nova demanda" ? "x" : " "}) Nova
+                    demanda
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.tipoDemanda === "Sustentação"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.tipoDemanda === "Sustentação" ? "x" : " "})
+                    Sustentação
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.tipoDemanda === "Garantia"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.tipoDemanda === "Garantia" ? "x" : " "}) Garantia
+                  </Text>
+                </View>
               </View>
+
+              <View style={styles.gridWithBorder}>
+                <View style={styles.gridItem}>
+                  <Text style={styles.fieldLabel}>Demanda solicitada via:</Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.demandaSolicitadaVia ===
+                      "Levantamento de Requisitos"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    (
+                    {demand.demandaSolicitadaVia ===
+                    "Levantamento de Requisitos"
+                      ? "x"
+                      : " "}
+                    ) Levantamento de Requisitos
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.demandaSolicitadaVia === "Inspeção de Sistemas"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    (
+                    {demand.demandaSolicitadaVia === "Inspeção de Sistemas"
+                      ? "x"
+                      : " "}
+                    ) Inspeção de Sistemas
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.demandaSolicitadaVia === "E-mail"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.demandaSolicitadaVia === "E-mail" ? "x" : " "})
+                    E-mail
+                  </Text>
+                </View>
+
+                <View style={styles.gridItem}>
+                  <Text style={styles.fieldLabel}>Atividades realizadas:</Text>
+                  {demand.atividadesRealizadas.map((activity, idx) => (
+                    <Text
+                      key={idx}
+                      style={[styles.fieldValue, { fontWeight: "bold" }]}
+                    >
+                      ( x ) {activity}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+
+              <View style={styles.gridWithBorder}>
+                <View style={styles.gridItem}>
+                  <Text style={styles.fieldLabel}>
+                    Perfil do desenvolvedor:
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.perfilDesenvolvedor === "Trainee"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.perfilDesenvolvedor === "Trainee" ? "x" : " "})
+                    Trainee
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.perfilDesenvolvedor === "Júnior"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.perfilDesenvolvedor === "Júnior" ? "x" : " "})
+                    Júnior
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.perfilDesenvolvedor === "Pleno"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.perfilDesenvolvedor === "Pleno" ? "x" : " "}) Pleno
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.perfilDesenvolvedor === "Sênior"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.perfilDesenvolvedor === "Sênior" ? "x" : " "})
+                    Sênior
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.perfilDesenvolvedor === "Especialista"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.perfilDesenvolvedor === "Especialista" ? "x" : " "}
+                    ) Especialista
+                  </Text>
+                </View>
+
+                <View style={styles.gridItem}>
+                  <Text style={styles.fieldLabel}>
+                    Complexidade da demanda:
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.complexidadeDemanda === "Baixa"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.complexidadeDemanda === "Baixa" ? "x" : " "}) Baixa
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.complexidadeDemanda === "Média"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.complexidadeDemanda === "Média" ? "x" : " "}) Média
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.complexidadeDemanda === "Intermediária"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    (
+                    {demand.complexidadeDemanda === "Intermediária" ? "x" : " "}
+                    ) Intermediária
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.complexidadeDemanda === "Alta"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.complexidadeDemanda === "Alta" ? "x" : " "}) Alta
+                  </Text>
+                  <Text
+                    style={[
+                      styles.fieldValue,
+                      demand.complexidadeDemanda === "Especialista"
+                        ? { fontWeight: "bold" }
+                        : {},
+                    ]}
+                  >
+                    ({demand.complexidadeDemanda === "Especialista" ? "x" : " "}
+                    ) Especialista
+                  </Text>
+                </View>
+              </View>
+
+              <Text style={styles.fieldLabel}>Responsável Técnico:</Text>
+              <Text style={styles.fieldValue}>{demand.responsavelTecnico}</Text>
+
+              <View style={styles.table}>
+                <View style={styles.tableRow}>
+                  <Text
+                    style={[
+                      styles.tableCellHeader,
+                      { width: "35%", textAlign: "right", fontSize: 9 },
+                    ]}
+                  >
+                    Breve descrição das atividades:
+                  </Text>
+                  <Text
+                    style={[
+                      styles.tableCell,
+                      { width: "65%", borderRight: "none" },
+                    ]}
+                  >
+                    {demand.breveDescricao}
+                  </Text>
+                </View>
+
+                <View style={styles.tableRow}>
+                  <Text
+                    style={[
+                      styles.tableCellHeader,
+                      { width: "35%", textAlign: "right", fontSize: 9 },
+                    ]}
+                  >
+                    Ferramentas e Tecnologias utilizadas:
+                  </Text>
+                  <Text
+                    style={[
+                      styles.tableCell,
+                      { width: "65%", borderRight: "none" },
+                    ]}
+                  >
+                    {demand.ferramentasTecnologias}
+                  </Text>
+                </View>
+
+                <View style={styles.tableRow}>
+                  <Text
+                    style={[
+                      styles.tableCellHeader,
+                      { width: "35%", textAlign: "right", fontSize: 9 },
+                    ]}
+                  >
+                    Ambiente dsv:
+                  </Text>
+                  <Text
+                    style={[
+                      styles.tableCell,
+                      { width: "65%", borderRight: "none" },
+                    ]}
+                  >
+                    {demand.ambienteDSV}
+                  </Text>
+                </View>
+
+                <View style={styles.tableRow}>
+                  <Text
+                    style={[
+                      styles.tableCellHeader,
+                      { width: "35%", textAlign: "right", fontSize: 9 },
+                    ]}
+                  >
+                    Repositório com as implementações:
+                  </Text>
+                  <Text
+                    style={[
+                      styles.tableCell,
+                      { width: "65%", borderRight: "none" },
+                    ]}
+                  >
+                    {demand.repositorioImplementacoes}
+                  </Text>
+                </View>
+
+                <View style={[styles.tableRow, { borderBottom: "none" }]}>
+                  <Text
+                    style={[
+                      styles.tableCellHeader,
+                      { width: "35%", textAlign: "right", fontSize: 9 },
+                    ]}
+                  >
+                    Nome da Funcionalidade/Tela:
+                  </Text>
+                  <Text
+                    style={[
+                      styles.tableCell,
+                      { width: "65%", borderRight: "none" },
+                    ]}
+                  >
+                    {demand.nomeFuncionalidadeTela}
+                  </Text>
+                </View>
+              </View>
+
+              <Text style={styles.fieldLabel}>
+                Evidências da Configuração e/ou Desenvolvimento:
+              </Text>
+              <Text style={styles.fieldValue}>(Ver páginas seguintes)</Text>
             </View>
+          </Page>
 
-            <View style={styles.gridWithBorder}>
-              <View style={styles.gridItem}>
-                <Text style={styles.fieldLabel}>Perfil do desenvolvedor:</Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.perfilDesenvolvedor === "Trainee" ? "x" : " "})
-                  Trainee
+          {/* Páginas separadas para cada evidência */}
+          {demand.evidencias.map((evidencia, evidIdx) => (
+            <Page
+              key={`${demand.id}-evidence-${evidIdx}`}
+              size="A4"
+              style={styles.page}
+            >
+              <View style={styles.demandSection}>
+                <Text style={styles.demandTitle}>
+                  • DEMANDA {String(index + 1).padStart(2, "0")} - Evidência{" "}
+                  {evidIdx + 1}
                 </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.perfilDesenvolvedor === "Júnior" ? "x" : " "}) Júnior
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.perfilDesenvolvedor === "Pleno" ? "x" : " "}) Pleno
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.perfilDesenvolvedor === "Sênior" ? "x" : " "}) Sênior
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.perfilDesenvolvedor === "Especialista" ? "x" : " "})
-                  Especialista
-                </Text>
-              </View>
-
-              <View style={styles.gridItem}>
-                <Text style={styles.fieldLabel}>Complexidade da demanda:</Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.complexidadeDemanda === "Baixa" ? "x" : " "}) Baixa
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.complexidadeDemanda === "Média" ? "x" : " "}) Média
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.complexidadeDemanda === "Intermediária" ? "x" : " "})
-                  Intermediária
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.complexidadeDemanda === "Alta" ? "x" : " "}) Alta
-                </Text>
-                <Text style={styles.fieldValue}>
-                  ({demand.complexidadeDemanda === "Especialista" ? "x" : " "})
-                  Especialista
-                </Text>
-              </View>
-            </View>
-
-            <Text style={styles.fieldLabel}>Responsável Técnico:</Text>
-            <Text style={styles.fieldValue}>{demand.responsavelTecnico}</Text>
-
-            <View style={styles.table}>
-              <View style={styles.tableRow}>
-                <Text
-                  style={[
-                    styles.tableCellHeader,
-                    { width: "35%", textAlign: "right", fontSize: 9 },
-                  ]}
-                >
-                  Breve descrição das atividades:
-                </Text>
-                <Text
-                  style={[
-                    styles.tableCell,
-                    { width: "65%", borderRight: "none" },
-                  ]}
-                >
-                  {demand.breveDescricao}
-                </Text>
-              </View>
-
-              <View style={styles.tableRow}>
-                <Text
-                  style={[
-                    styles.tableCellHeader,
-                    { width: "35%", textAlign: "right", fontSize: 9 },
-                  ]}
-                >
-                  Ferramentas e Tecnologias utilizadas:
-                </Text>
-                <Text
-                  style={[
-                    styles.tableCell,
-                    { width: "65%", borderRight: "none" },
-                  ]}
-                >
-                  {demand.ferramentasTecnologias}
-                </Text>
-              </View>
-
-              <View style={styles.tableRow}>
-                <Text
-                  style={[
-                    styles.tableCellHeader,
-                    { width: "35%", textAlign: "right", fontSize: 9 },
-                  ]}
-                >
-                  Ambiente dsv:
-                </Text>
-                <Text
-                  style={[
-                    styles.tableCell,
-                    { width: "65%", borderRight: "none" },
-                  ]}
-                >
-                  {demand.ambienteDSV}
-                </Text>
-              </View>
-
-              <View style={styles.tableRow}>
-                <Text
-                  style={[
-                    styles.tableCellHeader,
-                    { width: "35%", textAlign: "right", fontSize: 9 },
-                  ]}
-                >
-                  Repositório com as implementações:
-                </Text>
-                <Text
-                  style={[
-                    styles.tableCell,
-                    { width: "65%", borderRight: "none" },
-                  ]}
-                >
-                  {demand.repositorioImplementacoes}
-                </Text>
-              </View>
-
-              <View style={[styles.tableRow, { borderBottom: "none" }]}>
-                <Text
-                  style={[
-                    styles.tableCellHeader,
-                    { width: "35%", textAlign: "right", fontSize: 9 },
-                  ]}
-                >
-                  Nome da Funcionalidade/Tela:
-                </Text>
-                <Text
-                  style={[
-                    styles.tableCell,
-                    { width: "65%", borderRight: "none" },
-                  ]}
-                >
-                  {demand.nomeFuncionalidadeTela}
-                </Text>
-              </View>
-            </View>
-
-            <Text style={styles.fieldLabel}>
-              Evidências da Configuração e/ou Desenvolvimento:
-            </Text>
-            {demand.evidencias.map((evidencia, evidIdx) => (
-              <View
-                key={evidencia.id}
-                style={{ marginTop: 10, marginBottom: 10 }}
-              >
-                <Text style={styles.fieldValue}>Evidência {evidIdx + 1}:</Text>
                 {evidencia.imagens.map((imagem, imgIdx) => (
                   <View
                     key={imgIdx}
@@ -530,14 +700,15 @@ const PDFDocument = ({ report }: { report: Report }) => {
                   </View>
                 ))}
                 {evidencia.descricao && (
-                  <Text style={styles.fieldValue}>
-                    Descrição: {evidencia.descricao}
-                  </Text>
+                  <View style={{ marginTop: 10 }}>
+                    <Text style={styles.fieldLabel}>Descrição:</Text>
+                    <Text style={styles.fieldValue}>{evidencia.descricao}</Text>
+                  </View>
                 )}
               </View>
-            ))}
-          </View>
-        </Page>
+            </Page>
+          ))}
+        </>
       ))}
 
       {/* Página de Aprovação */}
