@@ -147,6 +147,13 @@ const styles = StyleSheet.create({
   gridItem: {
     width: "48%",
   },
+  gridWithBorder: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottom: "2px solid #fbe5d5",
+    paddingBottom: 8,
+    marginBottom: 8,
+  },
 });
 
 // Componente de Documento PDF
@@ -291,8 +298,7 @@ const PDFDocument = ({ report }: { report: Report }) => {
             <Text style={styles.demandTitle}>
               • DEMANDA {String(index + 1).padStart(2, "0")}.
             </Text>
-
-            <View style={styles.grid}>
+            <View style={styles.gridWithBorder}>
               <View style={styles.gridItem}>
                 <Text style={styles.fieldLabel}>Nível de prioridade:</Text>
                 <Text style={styles.fieldValue}>
@@ -329,67 +335,82 @@ const PDFDocument = ({ report }: { report: Report }) => {
               </View>
             </View>
 
-            <Text style={styles.fieldLabel}>Demanda solicitada via:</Text>
-            <Text style={styles.fieldValue}>
-              (
-              {demand.demandaSolicitadaVia === "Levantamento de Requisitos"
-                ? "x"
-                : " "}
-              ) Levantamento de Requisitos
-            </Text>
-            <Text style={styles.fieldValue}>
-              (
-              {demand.demandaSolicitadaVia === "Inspeção de Sistemas"
-                ? "x"
-                : " "}
-              ) Inspeção de Sistemas
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.demandaSolicitadaVia === "E-mail" ? "x" : " "}) E-mail
-            </Text>
-            <Text style={styles.fieldLabel}>Atividades realizadas:</Text>
-            {demand.atividadesRealizadas.map((activity, idx) => (
-              <Text key={idx} style={styles.fieldValue}>
-                ( x ) {activity}
-              </Text>
-            ))}
+            <View style={styles.gridWithBorder}>
+              <View style={styles.gridItem}>
+                <Text style={styles.fieldLabel}>Demanda solicitada via:</Text>
+                <Text style={styles.fieldValue}>
+                  (
+                  {demand.demandaSolicitadaVia === "Levantamento de Requisitos"
+                    ? "x"
+                    : " "}
+                  ) Levantamento de Requisitos
+                </Text>
+                <Text style={styles.fieldValue}>
+                  (
+                  {demand.demandaSolicitadaVia === "Inspeção de Sistemas"
+                    ? "x"
+                    : " "}
+                  ) Inspeção de Sistemas
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.demandaSolicitadaVia === "E-mail" ? "x" : " "})
+                  E-mail
+                </Text>
+              </View>
 
-            <Text style={styles.fieldLabel}>Perfil do desenvolvedor:</Text>
-            <Text style={styles.fieldValue}>
-              ({demand.perfilDesenvolvedor === "Trainee" ? "x" : " "}) Trainee
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.perfilDesenvolvedor === "Júnior" ? "x" : " "}) Júnior
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.perfilDesenvolvedor === "Pleno" ? "x" : " "}) Pleno
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.perfilDesenvolvedor === "Sênior" ? "x" : " "}) Sênior
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.perfilDesenvolvedor === "Especialista" ? "x" : " "})
-              Especialista
-            </Text>
+              <View style={styles.gridItem}>
+                <Text style={styles.fieldLabel}>Atividades realizadas:</Text>
+                {demand.atividadesRealizadas.map((activity, idx) => (
+                  <Text key={idx} style={styles.fieldValue}>
+                    ( x ) {activity}
+                  </Text>
+                ))}
+              </View>
+            </View>
 
-            <Text style={styles.fieldLabel}>Complexidade da demanda:</Text>
-            <Text style={styles.fieldValue}>
-              ({demand.complexidadeDemanda === "Baixa" ? "x" : " "}) Baixa
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.complexidadeDemanda === "Média" ? "x" : " "}) Média
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.complexidadeDemanda === "Intermediária" ? "x" : " "})
-              Intermediária
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.complexidadeDemanda === "Alta" ? "x" : " "}) Alta
-            </Text>
-            <Text style={styles.fieldValue}>
-              ({demand.complexidadeDemanda === "Especialista" ? "x" : " "})
-              Especialista
-            </Text>
+            <View style={styles.gridWithBorder}>
+              <View style={styles.gridItem}>
+                <Text style={styles.fieldLabel}>Perfil do desenvolvedor:</Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.perfilDesenvolvedor === "Trainee" ? "x" : " "})
+                  Trainee
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.perfilDesenvolvedor === "Júnior" ? "x" : " "}) Júnior
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.perfilDesenvolvedor === "Pleno" ? "x" : " "}) Pleno
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.perfilDesenvolvedor === "Sênior" ? "x" : " "}) Sênior
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.perfilDesenvolvedor === "Especialista" ? "x" : " "})
+                  Especialista
+                </Text>
+              </View>
+
+              <View style={styles.gridItem}>
+                <Text style={styles.fieldLabel}>Complexidade da demanda:</Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.complexidadeDemanda === "Baixa" ? "x" : " "}) Baixa
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.complexidadeDemanda === "Média" ? "x" : " "}) Média
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.complexidadeDemanda === "Intermediária" ? "x" : " "})
+                  Intermediária
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.complexidadeDemanda === "Alta" ? "x" : " "}) Alta
+                </Text>
+                <Text style={styles.fieldValue}>
+                  ({demand.complexidadeDemanda === "Especialista" ? "x" : " "})
+                  Especialista
+                </Text>
+              </View>
+            </View>
 
             <Text style={styles.fieldLabel}>Responsável Técnico:</Text>
             <Text style={styles.fieldValue}>{demand.responsavelTecnico}</Text>
