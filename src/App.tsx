@@ -86,20 +86,20 @@ function App() {
           <Tabs.List className="flex space-x-1 border-b border-gray-200">
             <Tabs.Trigger
               value="general"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 cursor-pointer transition-all duration-200 rounded-t-md"
             >
               1. Dados Gerais
             </Tabs.Trigger>
             <Tabs.Trigger
               value="demands"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent cursor-pointer transition-all duration-200 rounded-t-md"
               disabled={!isGeneralDataComplete()}
             >
               2. Demandas
             </Tabs.Trigger>
             <Tabs.Trigger
               value="preview"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent cursor-pointer transition-all duration-200 rounded-t-md"
               disabled={!isGeneralDataComplete() || demands.length === 0}
             >
               3. Preview e Exportação

@@ -72,20 +72,23 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRight: "1px solid #000",
     fontSize: 10,
+    justifyContent: "center",
   },
   tableCellBold: {
     padding: 8,
     borderRight: "1px solid #000",
     fontSize: 10,
     fontWeight: "bold",
+    justifyContent: "center",
   },
   tableCellHeader: {
     padding: 8,
     borderRight: "1px solid #000",
     fontSize: 10,
     fontWeight: "bold",
-    backgroundColor: "#f3f4f6",
+    backgroundColor: "#fbe5d5",
     textAlign: "center",
+    justifyContent: "center",
   },
   demandSection: {
     marginTop: 20,
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   highlightedBox: {
-    backgroundColor: "#fef3c7",
+    backgroundColor: "#fbe5d5",
     padding: 10,
     marginTop: 8,
   },
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   approvalHeader: {
-    backgroundColor: "#fed7aa",
+    backgroundColor: "#fbe5d5",
     padding: 8,
     borderBottom: "2px solid #000",
     textAlign: "center",
@@ -169,15 +172,24 @@ const PDFDocument = ({ report }: { report: Report }) => {
         {/* Tabela de Histórico de Versão */}
         <View style={styles.table}>
           <View style={styles.tableRow}>
-            <Text style={[styles.tableCellBold, { width: "25%" }]}>
-              Objetivo deste artefato:
+            <Text
+              style={[
+                styles.tableCellHeader,
+                { width: "100%", borderRight: "none" },
+              ]}
+            >
+              Objetivo deste artefato
             </Text>
-            <Text style={[styles.tableCell, { width: "75%" }]}>
+          </View>
+          <View style={styles.tableRow}>
+            <Text
+              style={[styles.tableCell, { width: "100%", borderRight: "none" }]}
+            >
               {generalData.objetivoArtefato}
             </Text>
           </View>
           <View style={styles.tableRow}>
-            <Text style={[styles.tableCellBold, { width: "25%" }]}>
+            <Text style={[styles.tableCellHeader, { width: "25%" }]}>
               Nº do Contrato:
             </Text>
             <Text style={[styles.tableCell, { width: "75%" }]}>
@@ -185,7 +197,7 @@ const PDFDocument = ({ report }: { report: Report }) => {
             </Text>
           </View>
           <View style={styles.tableRow}>
-            <Text style={[styles.tableCellBold, { width: "25%" }]}>
+            <Text style={[styles.tableCellHeader, { width: "25%" }]}>
               Nº da Os:
             </Text>
             <Text style={[styles.tableCell, { width: "75%" }]}>
@@ -193,7 +205,7 @@ const PDFDocument = ({ report }: { report: Report }) => {
             </Text>
           </View>
           <View style={styles.tableRow}>
-            <Text style={[styles.tableCellBold, { width: "25%" }]}>
+            <Text style={[styles.tableCellHeader, { width: "25%" }]}>
               Detalhamento da OS:
             </Text>
             <Text style={[styles.tableCell, { width: "75%" }]}>
@@ -203,11 +215,11 @@ const PDFDocument = ({ report }: { report: Report }) => {
           <View style={styles.tableRow}>
             <Text
               style={[
-                styles.tableCellBold,
+                styles.tableCellHeader,
                 { width: "100%", borderRight: "none" },
               ]}
             >
-              O(s) objetivo(s) desta ERS é (são):
+              O(s) objetivo(s) desta ERS é (são)
             </Text>
           </View>
           <View style={styles.tableRow}>
@@ -382,45 +394,101 @@ const PDFDocument = ({ report }: { report: Report }) => {
             <Text style={styles.fieldLabel}>Responsável Técnico:</Text>
             <Text style={styles.fieldValue}>{demand.responsavelTecnico}</Text>
 
-            <View style={styles.highlightedBox}>
-              <Text style={styles.fieldLabel}>
-                Breve descrição das atividades:
-              </Text>
-              <Text style={[styles.fieldValue, { color: "#dc2626" }]}>
-                {demand.breveDescricao}
-              </Text>
-            </View>
+            <View style={styles.table}>
+              <View style={styles.tableRow}>
+                <Text
+                  style={[
+                    styles.tableCellHeader,
+                    { width: "35%", textAlign: "right", fontSize: 9 },
+                  ]}
+                >
+                  Breve descrição das atividades:
+                </Text>
+                <Text
+                  style={[
+                    styles.tableCell,
+                    { width: "65%", borderRight: "none" },
+                  ]}
+                >
+                  {demand.breveDescricao}
+                </Text>
+              </View>
 
-            <View style={styles.highlightedBox}>
-              <Text style={styles.fieldLabel}>
-                Ferramentas e Tecnologias utilizadas:
-              </Text>
-              <Text style={styles.fieldValue}>
-                {demand.ferramentasTecnologias}
-              </Text>
-            </View>
+              <View style={styles.tableRow}>
+                <Text
+                  style={[
+                    styles.tableCellHeader,
+                    { width: "35%", textAlign: "right", fontSize: 9 },
+                  ]}
+                >
+                  Ferramentas e Tecnologias utilizadas:
+                </Text>
+                <Text
+                  style={[
+                    styles.tableCell,
+                    { width: "65%", borderRight: "none" },
+                  ]}
+                >
+                  {demand.ferramentasTecnologias}
+                </Text>
+              </View>
 
-            <View style={styles.highlightedBox}>
-              <Text style={styles.fieldLabel}>Ambiente dsv:</Text>
-              <Text style={styles.fieldValue}>{demand.ambienteDSV}</Text>
-            </View>
+              <View style={styles.tableRow}>
+                <Text
+                  style={[
+                    styles.tableCellHeader,
+                    { width: "35%", textAlign: "right", fontSize: 9 },
+                  ]}
+                >
+                  Ambiente dsv:
+                </Text>
+                <Text
+                  style={[
+                    styles.tableCell,
+                    { width: "65%", borderRight: "none" },
+                  ]}
+                >
+                  {demand.ambienteDSV}
+                </Text>
+              </View>
 
-            <View style={styles.highlightedBox}>
-              <Text style={styles.fieldLabel}>
-                Repositório com as implementações:
-              </Text>
-              <Text style={styles.fieldValue}>
-                {demand.repositorioImplementacoes}
-              </Text>
-            </View>
+              <View style={styles.tableRow}>
+                <Text
+                  style={[
+                    styles.tableCellHeader,
+                    { width: "35%", textAlign: "right", fontSize: 9 },
+                  ]}
+                >
+                  Repositório com as implementações:
+                </Text>
+                <Text
+                  style={[
+                    styles.tableCell,
+                    { width: "65%", borderRight: "none" },
+                  ]}
+                >
+                  {demand.repositorioImplementacoes}
+                </Text>
+              </View>
 
-            <View style={styles.highlightedBox}>
-              <Text style={styles.fieldLabel}>
-                Nome da Funcionalidade/Tela:
-              </Text>
-              <Text style={styles.fieldValue}>
-                {demand.nomeFuncionalidadeTela}
-              </Text>
+              <View style={[styles.tableRow, { borderBottom: "none" }]}>
+                <Text
+                  style={[
+                    styles.tableCellHeader,
+                    { width: "35%", textAlign: "right", fontSize: 9 },
+                  ]}
+                >
+                  Nome da Funcionalidade/Tela:
+                </Text>
+                <Text
+                  style={[
+                    styles.tableCell,
+                    { width: "65%", borderRight: "none" },
+                  ]}
+                >
+                  {demand.nomeFuncionalidadeTela}
+                </Text>
+              </View>
             </View>
 
             <Text style={styles.fieldLabel}>
@@ -487,7 +555,7 @@ const PDFDocument = ({ report }: { report: Report }) => {
               fontSize: 12,
               fontWeight: "bold",
               marginTop: 20,
-              marginBottom: 10,
+              marginBottom: 0,
             }}
           >
             Cliente,
