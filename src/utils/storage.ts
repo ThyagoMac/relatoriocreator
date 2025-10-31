@@ -148,6 +148,24 @@ export function getDefaultGeneralData(): GeneralData {
 }
 
 /**
+ * Limpa completamente o banco de dados IndexedDB
+ */
+export async function clearAllDatabase(): Promise<void> {
+  try {
+    // Limpa todos os registros da tabela reports
+    await db.reports.clear();
+
+    // Também limpa o LocalStorage caso tenha sobrado algo
+    localStorage.removeItem(STORAGE_KEY);
+
+    console.log("✅ Banco de dados limpo com sucesso!");
+  } catch (error) {
+    console.error("Erro ao limpar o banco de dados:", error);
+    throw error;
+  }
+}
+
+/**
  * Converte um arquivo de imagem para base64 com compressão e redimensionamento
  */
 export function imageToBase64(file: File): Promise<string> {
