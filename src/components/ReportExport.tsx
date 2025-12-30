@@ -297,7 +297,7 @@ const PDFDocument = ({ report }: { report: Report }) => {
           <Page key={demand.id} size="A4" style={styles.page}>
             <View style={styles.demandSection}>
               <Text style={styles.demandTitle}>
-                • DEMANDA {String(index + 1).padStart(2, "0")}.
+                • DEMANDA {String(index + 1).padStart(2, "0")}: {demand.titulo}
               </Text>
               <View style={styles.gridWithBorder}>
                 <View style={styles.gridItem}>
@@ -688,8 +688,8 @@ const PDFDocument = ({ report }: { report: Report }) => {
             >
               <View style={styles.demandSection}>
                 <Text style={styles.demandTitle}>
-                  • DEMANDA {String(index + 1).padStart(2, "0")} - Evidência{" "}
-                  {evidIdx + 1}
+                  • DEMANDA {String(index + 1).padStart(2, "0")}:{" "}
+                  {demand.titulo} - Evidência {evidIdx + 1}
                 </Text>
                 {evidencia.imagens.map((imagem, imgIdx) => (
                   <View
